@@ -24,6 +24,28 @@ node{
           }
       }
 
+    }},
+    services: { node {
+      
+      checkout scm
+
+      stage('build') {
+        
+        docker.build(
+          'services', 
+          './services'
+        )
+      }
+
+      stage('test') {
+        
+        docker
+          .image('services')
+          .withRun { c ->
+            sh 'ls'
+          }
+      }
+
     }}
   )
 }
