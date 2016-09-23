@@ -6,17 +6,14 @@ node{
   parallel (
     api: { node {
       checkout scm
-      sh """
-        cd api
-        docker build -t api .
-      """
 
+      docker.build "api:snapshot"
     }},
     services: { node {
       checkout scm
       sh """
         cd services
-        docker build -t services.
+        docker build -t services .
       """
     }}
   )
