@@ -19,7 +19,7 @@ node{
         
         docker
           .image('api')
-          .inside {
+          .withRun { c ->
             sh 'ls'
           }
       }
