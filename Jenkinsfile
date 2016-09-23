@@ -7,13 +7,9 @@ node{
     api: { node {
       checkout scm
 
-      docker.build "api:snapshot"
-    }},
-    services: { node {
-      checkout scm
       sh """
-        cd services
-        docker build -t services .
+        cd api
+        docker build -t api .
       """
     }}
   )
