@@ -1,7 +1,5 @@
 #!/usr/bin/groovy
 
-node{
-
   parallel (
     api: { node {
       
@@ -48,4 +46,3 @@ node{
 
     }}
   )
-}
