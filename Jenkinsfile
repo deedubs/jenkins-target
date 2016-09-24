@@ -1,48 +1,38 @@
 #!/usr/bin/groovy
 
-  parallel (
-    api: { node {
-      
-      checkout scm
+def imageTag = "${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
 
-      stage('build') {
-        
-        docker.build(
-          'api', 
-          './api'
-        )
+stage "Build" {
+  
+    parallel {
+      api: {
+        node {
+          
+          checkout scm
+  
+          docker
+            .build(
+              "massiveco/api:${imageTag}", 
+              "./api"
+            )
+            .push()
+        }
       }
+    }
+}
 
-      stage('test') {
-        
-        docker
-          .image('api')
-          .withRun { c ->
-            sh 'ls'
-          }
+stage "Test" {
+  
+  parallel {
+      api: {
+        node {
+          
+          docker
+            .image("massiveco/api:${imageTag}")
+            .withRun { c ->
+              sh 'ls'
+            }
+        }
       }
-
-    }},
-    services: { node {
-      
-      checkout scm
-
-      stage('build') {
-        
-        docker.build(
-          'services', 
-          './services'
-        )
-      }
-
-      stage('test') {
-        
-        docker
-          .image('services')
-          .withRun { c ->
-            sh 'ls'
-          }
-      }
-
-    }}
-  )
+    }
+}
